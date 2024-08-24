@@ -5,6 +5,7 @@ const appRouter = require('./src/config/routes');
 const multer = require('multer');
 const path = require('path'); // Thêm dòng này để import module 'path'
 const { Server } = require('socket.io');
+const assembly = require('./src/services/assembly');
 
 const app = express();
 const server = createServer(app);
@@ -34,9 +35,12 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    res.status(200).json({ message: 'File uploaded successfully!', file: req.file });
+    const fileName = req.file.filename;
+    console.log('File uploaded successfully:', fileName);
+    const text = await assembly(fileName);
+    res.status(200).json({ text });
   } catch (error) {
     res.status(400).json({ message: 'File upload failed!', error: error.message });
   }
@@ -46,6 +50,7 @@ app.use(function (req,res){
   res.status(404).send('Unable to find the requested resource!');
 });
 
+// app.use('/api', appRouter)
 io.on('connection', (socket) => {
   console.log('a user connected');
 });
