@@ -36,7 +36,7 @@ console.log('FILE_URL', FILE_URL);
     const transcript = await client.transcripts.transcribe(data);
     console.log('transcript', transcript);
     console.log('transcript.text', transcript.text);
-    socket.emit('translate', 'translate...' + transcript.text + '...');
+    socket.emit('translate', transcript.text);
     return transcript.text;
   };
 
