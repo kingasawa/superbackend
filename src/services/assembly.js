@@ -4,7 +4,7 @@ const fs = require('fs'); // Thêm dòng này để require 'fs' module
 const path = require('path');
 const OpenAI = require("openai");
 const axios = require('axios');
-const API_KEY = 'sk-GPCMyuigBJ0CDgd6BVKLKMH9BSiuI1bZiD8WqYB_O1T3BlbkFJMLuvOoIDlQkc8rvqadZv6o4swWxlMb991wTpTlEXEA';
+const API_KEY = process.env.OPENAI_API_KEY;
 const assembly = async(socket, blob) => {
   const fileBuffer = Buffer.from(new Uint8Array(blob));
   const fileName = Date.now() + '.m4a';
