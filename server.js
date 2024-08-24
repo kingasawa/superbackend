@@ -46,6 +46,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(function (req,res){
   res.status(404).send('Unable to find the requested resource!');
 });

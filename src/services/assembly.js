@@ -14,7 +14,7 @@ const assembly = (name) => {
   //   'https://storage.googleapis.com/aai-web-samples/5_common_sports_injuries.mp3';
 
 // You can also transcribe a local file by passing in a file path
-const FILE_URL = 'https://english.simplecode.online/upload/' + name;
+const FILE_URL = 'https://simplecode.online/upload/' + name;
 console.log('FILE_URL', FILE_URL);
 
 // Request parameters
