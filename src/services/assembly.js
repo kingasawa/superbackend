@@ -2,8 +2,10 @@ const { AssemblyAI } = require('assemblyai');
 const { join } = require('node:path');
 const fs = require('fs'); // Thêm dòng này để require 'fs' module
 const path = require('path');
-
-const assembly = (socket, blob) => {
+const OpenAI = require("openai");
+const axios = require('axios');
+const API_KEY = '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';
+const assembly = async(socket, blob) => {
   const fileBuffer = Buffer.from(new Uint8Array(blob));
   const fileName = Date.now() + '.m4a';
   const filePath = join(__dirname, '../../uploads', fileName);
@@ -34,10 +36,24 @@ console.log('FILE_URL', FILE_URL);
 
   const run = async () => {
     const transcript = await client.transcripts.transcribe(data);
-    console.log('transcript', transcript);
+
     console.log('transcript.text', transcript.text);
     socket.emit('translate', transcript.text);
-    return transcript.text;
+
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions', {
+      model: 'gpt-4o-mini-2024-07-18',
+      messages: [{ role: 'user', content: transcript.text }],
+    }, {
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('Response from OpenAI:', response.data);
+
+    return response.data;
   };
 
   run().then();
