@@ -52,7 +52,7 @@ console.log('FILE_URL', FILE_URL);
     });
 
     console.log('Response from OpenAI:', response.data.choices);
-
+    socket.emit('bot_chat', response.data.choices[0].message.content);
     return response.data;
   };
 
