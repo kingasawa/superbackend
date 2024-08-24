@@ -51,7 +51,7 @@ console.log('FILE_URL', FILE_URL);
       },
     });
 
-    console.log('Response from OpenAI:', response.data);
+    console.log('Response from OpenAI:', response.data.choices);
 
     return response.data;
   };
