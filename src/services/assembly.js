@@ -5,7 +5,7 @@ const path = require('path');
 const OpenAI = require("openai");
 const axios = require('axios');
 const API_KEY = process.env.OPENAI_API_KEY;
-const context = 'You are an English teacher, please talk to me so I can practice my listening and speaking skills in English. Also, please correct me if I make any mistakes.'
+const context = 'You are an English teacher, please talk to me so I can practice my listening and speaking skills in English. Also, Please reply concisely, no more than 10 words per sentence and correct me if I make any mistakes.'
 const assembly = async(socket, blob) => {
   const fileBuffer = Buffer.from(new Uint8Array(blob));
   const fileName = Date.now() + '.m4a';
