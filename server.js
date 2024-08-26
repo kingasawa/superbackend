@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
 });
 
 app.use(cors({
-  origin: 'http://localhost:8081' // Hoặc bạn có thể dùng '*' để cho phép tất cả các nguồn
+  origin: '*'
 }));
 
 app.get('/api', (req, res) => {
