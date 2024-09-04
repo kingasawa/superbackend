@@ -3,13 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const { createServer } = require('node:http');
 const appRouter = require('./src/config/routes');
+const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path'); // Thêm dòng này để import module 'path'
 const { Server } = require('socket.io');
 const assembly = require('./src/services/assembly');
-const socketIo = require('socket.io');
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(bodyParser.raw())
 const server = createServer(app);
 const io = new Server(server, {});
 io.on('connection', (socket) => {
@@ -42,7 +45,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    console.log('try upload');
     const fileName = req.file.filename;
     console.log('File uploaded successfully:', fileName);
     await assembly(fileName);
@@ -51,6 +53,15 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     res.status(400).json({ message: 'File upload failed!', error: error.message });
   }
 });
+
+app.post('/users', (req, res) => {
+  console.log('req.body', req.body);
+  res.status(200).send({
+    user: {
+      token: 'test'
+    }
+  })
+})
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

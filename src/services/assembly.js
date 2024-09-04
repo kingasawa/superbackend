@@ -1,8 +1,6 @@
 const { AssemblyAI } = require('assemblyai');
 const { join } = require('node:path');
 const fs = require('fs'); // Thêm dòng này để require 'fs' module
-const path = require('path');
-const OpenAI = require("openai");
 const axios = require('axios');
 const API_KEY = process.env.OPENAI_API_KEY;
 const context = 'You are an English teacher, please talk to me so I can practice my listening and speaking skills in English. Also, Please reply concisely, no more than 10 words per sentence and correct me if I make any mistakes.'
@@ -34,13 +32,10 @@ console.log('FILE_URL', FILE_URL);
   const data = {
     audio_url: FILE_URL
   }
-
   const run = async () => {
     const transcript = await client.transcripts.transcribe(data);
-
     console.log('transcript.text', transcript.text);
     socket.emit('translate', transcript.text);
-
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4o-mini-2024-07-18',
@@ -54,14 +49,11 @@ console.log('FILE_URL', FILE_URL);
         'Content-Type': 'application/json',
       },
     });
-
     console.log('Response from OpenAI:', response.data.choices);
     socket.emit('bot_chat', response.data.choices[0].message.content);
     return response.data;
   };
-
   run().then();
-
 }
 
 module.exports = assembly
