@@ -1,4 +1,5 @@
 require('dotenv').config();
+const databaseService = require('./src/database/databaseService');
 const express = require('express');
 const cors = require('cors');
 const { createServer } = require('node:http');
@@ -7,7 +8,10 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path'); // Thêm dòng này để import module 'path'
 const { Server } = require('socket.io');
-const assembly = require('./src/services/assembly');
+const assembly = require('./src/api/services/assembly');
+
+// Khởi tạo kết nối cơ sở dữ liệu khi server khởi động
+databaseService.init().then();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,10 +34,6 @@ app.use(cors({
   origin: '*'
 }));
 
-app.get('/api', (req, res) => {
-  res.json({ message: 'super backend' });
-});
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/'); // Thư mục lưu trữ tệp tải lên
@@ -54,16 +54,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-app.post('/users', (req, res) => {
-  console.log('req.body', req.body);
-  res.status(200).send({
-    user: {
-      token: 'test'
-    }
-  })
-})
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api', appRouter);
 
 app.use(function (req,res){
   res.status(404).send('Unable to find the requested resource!');
